@@ -42,11 +42,7 @@
             $res = $sql->select("SELECT * FROM tb_usuarios WHERE idusuario = :id", array(":id"=>$id));
             
             if(isset($res[0])){
-                $row = $res[0];
-                $this->setIdusuario($row['idusuario']);
-                $this->setTxtlogin($row['txtlogin']);
-                $this->setTxtsenha($row['txtsenha']);
-                $this->setDtcadastro(new DateTime($row['dtcadastro']));
+                $this->setData($res[0]);
             }
             
         }
@@ -66,14 +62,33 @@
             $res = $sql->select("SELECT * FROM tb_usuarios WHERE txtlogin = :login AND txtsenha = :pass", array(":login"=>$login, ":pass"=>$pass));
             
             if(isset($res[0])){
-                $row = $res[0];
-                $this->setIdusuario($row['idusuario']);
-                $this->setTxtlogin($row['txtlogin']);
-                $this->setTxtsenha($row['txtsenha']);
-                $this->setDtcadastro(new DateTime($row['dtcadastro']));
+                
+                $this->setData($res[0]);
             }else{
                 throw new Exception("Login e/ou senha inválidos");
             }
+        }
+        
+        public function setData($data){
+            $this->setIdusuario($data['idusuario']);
+            $this->setTxtlogin($data['txtlogin']);
+            $this->setTxtsenha($data['txtsenha']);
+            $this->setDtcadastro(new DateTime($data['dtcadastro']));
+        }
+        
+        public function insert(){
+            $sql = new Sql();
+            
+            $res = $sql->select("CALL sp_usuarios_insert(:login, :senha)", array(':login'=>$this->getTxtlogin(),':senha'=>$this->getTxtsenha()));
+            
+            if(count($res)>0){
+                $this->setData($res[0]);
+            }
+        }
+        
+        public function __construct($login="", $pass="") {
+            $this->setTxtlogin($login);
+            $this->setTxtsenha($pass);
         }
         
         public function __toString() {

@@ -86,6 +86,20 @@
             }
         }
         
+        public function update($login,$pass){
+            
+            $this->setTxtlogin($login);
+            $this->setTxtsenha($pass);
+            $sql = new Sql();
+            $sql->query("UPDATE tb_usuarios SET txtlogin = :login, txtsenha = :pass WHERE idusuario = :id",
+                array(
+                    ":login"=> $this->getTxtlogin(),
+                    ":pass"=> $this->getTxtsenha(),
+                    "id"=> $this->getIdusuario()
+                )
+            );
+        }
+        
         public function __construct($login="", $pass="") {
             $this->setTxtlogin($login);
             $this->setTxtsenha($pass);

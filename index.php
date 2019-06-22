@@ -23,8 +23,17 @@
     echo $usuario;
     */
     
-    $aluno = new Usuario("aluno","@lun0");
+    /* criando um novo usuario */
+    /* $aluno = new Usuario("aluno","@lun0");
     $aluno->insert();
     
     echo $aluno;
+    */
+    
+    $user = new Usuario();
+    $user->loadById(8);
+    $user->update("professor", "!@#$%&*");
+    
+    echo $user;
+    
 ?>
